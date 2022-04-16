@@ -32,8 +32,8 @@ const Nav = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar style={{ background: "white" }}>
-        <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
+      <AppBar style={{ background: "white", }}>
+        <Toolbar style={{display: "flex", justifyContent: "space-between", maxWidth: '1128px', width: '100%', margin: 'auto', padding: "0px" }}>
           <img
             src="./images/SmartQ Logo.png"
             alt="logo"
