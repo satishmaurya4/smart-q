@@ -1,0 +1,16 @@
+.productContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 0.6;
+}
+.banner{
+    border-radius: 10px;
+    height: 180px;
+    overflow: hidden;
+}
+.banner img{
+    width: 100%;
+    vertical-align: middle;
+    object-fit: cover;
+}

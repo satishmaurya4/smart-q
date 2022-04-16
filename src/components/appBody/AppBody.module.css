@@ -1,0 +1,16 @@
+.main{
+    max-width: 1128px;
+    width: 100%;;
+    margin: auto;
+    padding-top: 20px;
+    
+}
+.title{
+    color: rgb(0, 71, 163);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+.productInfo{
+    display: flex;
+    gap: 10px;
+}
