@@ -7,28 +7,32 @@ import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
+import {useDispatch, useSelector} from 'react-redux'
+import { getAllProducts, getSearchedProduct} from '../features/products/productSlice'
 
 const Nav = () => {
   const [isCloseOpen, setIsCloseOpen] = useState(false);
-  const [input, setInput] = useState("");
+  // const [input, setInput] = useState("");
+  const dispatch = useDispatch();
+  const useProducts = useSelector(getAllProducts);
+  const { filterProducts: { searchProduct } } = useProducts;
 
   const handleCloseIcon = () => {
-    if (!input) {
+    if (!searchProduct) {
       setIsCloseOpen(false);
-      console.log("inside if");
     } else {
       setIsCloseOpen(true);
     }
   };
 
   const handleClearInput = () => {
-    setInput("");
+    dispatch(getSearchedProduct(""));
     setIsCloseOpen(false);
   };
 
   useEffect(() => {
     handleCloseIcon();
-  }, [input]);
+  }, [searchProduct]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -61,8 +65,8 @@ const Nav = () => {
               sx={{ ml: 1, flex: 1 }}
               placeholder="Search Item"
               inputProps={{ "aria-label": "search google maps" }}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
+              value={searchProduct}
+              onChange={(e) => dispatch(getSearchedProduct(e.target.value))}
             />
             {isCloseOpen && (
               <IconButton

@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { getAllProducts } from "../features/products/productSlice";
 import { Paper } from "@mui/material";
 import Banner from "../banner/Banner";
+import Product from "./Product";
 
 
 
@@ -44,7 +45,7 @@ function TabPanel(props) {
       sx={{ border: "1px solid" }}
     >
       {value === index && (
-        <Box sx={{ p: 3, border: "1px solid", marginLeft: "120px",padding: '0', width: '704px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <Box sx={{ p: 3, marginLeft: "120px",padding: '0', width: '704px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {children}
         </Box>
       )}
@@ -65,31 +66,34 @@ function a11yProps(index) {
   };
 }
 
+
+
 export default function VerticalTabs() {
   const [value, setValue] = React.useState(0);
-
+  
   const useAllProducts = useSelector(getAllProducts);
-  console.log("Product section", useAllProducts)
   const {
-    products: { extras:{categories:{Consumables:{bannerImage}}}, menu },
+    products: { extras: { categories: { Consumables: { bannerImage } } }, menu },
+    filterProducts:{searchProduct}
   } = useAllProducts;
+  const transformedProduct = () => {
+    let getMenu = menu;
+    if (searchProduct) {
+      getMenu = getMenu.filter((item) => {
+        return item.foodname.toLowerCase().trim().includes(searchProduct.toLowerCase().trim());
+      });
+      console.log('inside search products', getMenu);
+    }
+
+    return getMenu;
+
+  }
   const classes = useStyles();
   const tabClasses = { root: classes.tab };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  const renderProducts = menu?.map((item) => {
-    const { foodid, foodname } = item;
-    return (
-      <Paper key={foodid} sx={{padding: '5px'}}>
-        <Typography variant="h4">{foodname}</Typography>
-        
-      </Paper>
-    )
-  })
-
   return (
     <Box
       sx={{
@@ -183,7 +187,7 @@ export default function VerticalTabs() {
         <Banner title="Main Course" desc="When you have every favourite dishes in a plate"
           bannerImage={bannerImage}
         />
-        {renderProducts}
+        <Product menu = {transformedProduct()} />
       </TabPanel>
       <TabPanel value={value} index={1}>
       <Banner title="Snacks" />

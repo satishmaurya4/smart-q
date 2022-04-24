@@ -3,7 +3,6 @@ import ProductList from '../products/ProductList';
 import ProductSection from '../products/ProductSection';
 import Cart from '../cart/Cart';
 import styles from "./AppBody.module.css";
-import Sidebar from '../sidebar/Sidebar';
 import { Typography } from '@mui/material';
 import productApi from '../../api/api'
 import { useDispatch } from 'react-redux';
@@ -25,7 +24,6 @@ const AppBody = () => {
         .catch((err) => {
         console.log('error', err)
       })
-      console.log('api result', result)
       dispatch(addProducts(result.data))
       setIsLoading(false);
     }
