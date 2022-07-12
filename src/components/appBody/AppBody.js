@@ -6,7 +6,7 @@ import styles from "./AppBody.module.css";
 import { Typography } from '@mui/material';
 import productApi from '../../api/api'
 import { useDispatch } from 'react-redux';
-import { addProducts } from '../features/products/productSlice';
+import { storeProducts } from '../features/products/productSlice';
 import Loading from '../loading/Loading'
 
 
@@ -24,7 +24,7 @@ const AppBody = () => {
         .catch((err) => {
         console.log('error', err)
       })
-      dispatch(addProducts(result.data))
+      dispatch(storeProducts(result.data))
       setIsLoading(false);
     }
     fetchProductData();

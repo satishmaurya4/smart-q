@@ -9,13 +9,13 @@ import IconButton from '@mui/material/IconButton';
 import CommentIcon from '@mui/icons-material/Comment';
 import {Paper} from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllProducts, getToppings } from '../../features/products/productSlice';
+import { getState, getToppings } from '../../features/products/productSlice';
 
-export default function AddonsList({submenu}) {
+export default function AddonsList({submenu,id, getIetemInfo}) {
   const [checked, setChecked] = React.useState([]);
   const [newChecked, setNewChecked] = React.useState([]);
   const dispatch = useDispatch();
-  const useProduct = useSelector(getAllProducts);
+  const useProduct = useSelector(getState);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -40,7 +40,7 @@ export default function AddonsList({submenu}) {
   }, [newChecked])
   
   React.useEffect(() => {
-    dispatch(getToppings(checked))
+    dispatch(getToppings({checked, id}))
   }, [checked])
 
 
@@ -72,7 +72,8 @@ export default function AddonsList({submenu}) {
                   checked={checked.indexOf(item) !== -1}
                   tabIndex={-1}
                   disableRipple = {true}
-                  inputProps={{ 'aria-labelledby': labelId }}
+                    inputProps={{ 'aria-labelledby': labelId }}
+                    name="addon"
                 />
               </ListItemIcon>
               <ListItemText id={labelId} primary={item} />

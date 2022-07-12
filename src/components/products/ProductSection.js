@@ -7,16 +7,15 @@ import Box from "@mui/material/Box";
 import { MdFoodBank } from "react-icons/md";
 import { SiIfood } from "react-icons/si";
 import DinnerDiningIcon from "@mui/icons-material/DinnerDining";
+import { GiFullPizza, GiWineGlass, GiPapers } from "react-icons/gi";
 import CakeIcon from "@mui/icons-material/Cake";
 import EmojiFoodBeverageIcon from "@mui/icons-material/EmojiFoodBeverage";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
-import { getAllProducts } from "../features/products/productSlice";
+import { getState } from "../features/products/productSlice";
 import { Paper } from "@mui/material";
 import Banner from "../banner/Banner";
 import Product from "./Product";
-
-
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -45,7 +44,17 @@ function TabPanel(props) {
       sx={{ border: "1px solid" }}
     >
       {value === index && (
-        <Box sx={{ p: 3, marginLeft: "120px",padding: '0', width: '704px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <Box
+          sx={{
+            p: 3,
+            marginLeft: "120px",
+            padding: "0",
+            width: "704px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px",
+          }}
+        >
           {children}
         </Box>
       )}
@@ -66,28 +75,44 @@ function a11yProps(index) {
   };
 }
 
-
-
 export default function VerticalTabs() {
   const [value, setValue] = React.useState(0);
-  
-  const useAllProducts = useSelector(getAllProducts);
+  const [category, setCategory] = React.useState("");
+
+  const useAllProducts = useSelector(getState);
   const {
-    products: { extras: { categories: { Consumables: { bannerImage } } }, menu },
-    filterProducts:{searchProduct}
+    products: {
+      extras: {
+        categories: {
+          Consumables: { bannerImage: consumablesBannerImage },
+          Decorations: { bannerImage: decorationsBannerImage },
+          Pizza: { bannerImage: pizzaBannerImage },
+        },
+      },
+      menu,
+    },
+    filterProducts: { searchProduct },
   } = useAllProducts;
+
+  const getCategory = (categoryName) => setCategory(categoryName);
+
   const transformedProduct = () => {
     let getMenu = menu;
     if (searchProduct) {
       getMenu = getMenu.filter((item) => {
-        return item.foodname.toLowerCase().trim().includes(searchProduct.toLowerCase().trim());
+        return item.foodname
+          .toLowerCase()
+          .trim()
+          .includes(searchProduct.toLowerCase().trim());
       });
-      console.log('inside search products', getMenu);
+    } else if (category === "" || category) {
+      getMenu = getMenu.filter((item) => {
+        return item.category.toLowerCase().includes(category);
+      });
     }
 
     return getMenu;
-
-  }
+  };
   const classes = useStyles();
   const tabClasses = { root: classes.tab };
 
@@ -101,9 +126,8 @@ export default function VerticalTabs() {
         bgcolor: "background.paper",
         display: "flex",
         height: "auto",
-        
       }}
-      style={{width: '800px',}}
+      style={{ width: "800px" }}
     >
       <Tabs
         orientation="vertical"
@@ -119,7 +143,7 @@ export default function VerticalTabs() {
           borderColor: "#9ee2ff",
           position: "fixed",
           paddingRight: "5px",
-          height: '400px'
+          height: "400px",
         }}
       >
         <Tab
@@ -133,77 +157,75 @@ export default function VerticalTabs() {
             padding: "0px",
             textTransform: "capitalize",
           }}
+          onClick={() => getCategory("")}
         />
         <Tab
-          label="Snacks"
+          label="Pizzas"
           {...a11yProps(1)}
           classes={tabClasses}
-          icon={<SiIfood fontSize="40px" />}
+          icon={<GiFullPizza fontSize="40px" />}
           disableRipple={true}
           sx={{
             width: "max-content",
             padding: "0px",
             textTransform: "capitalize",
           }}
+          onClick={() => getCategory("pizza")}
         />
         <Tab
-          label="Special Meals"
+          label="Counsumables"
           {...a11yProps(2)}
           classes={tabClasses}
-          icon={<DinnerDiningIcon sx={{ fontSize: "40px" }} />}
+          icon={<GiWineGlass fontSize="40px" />}
           disableRipple={true}
           sx={{
             width: "max-content",
             padding: "0px",
             textTransform: "capitalize",
           }}
+          onClick={() => getCategory("consumables")}
         />
         <Tab
-          label="Desert"
+          label="Decorations"
           {...a11yProps(3)}
           classes={tabClasses}
-          icon={<CakeIcon sx={{ fontSize: "40px" }} />}
+          icon={<GiPapers fontSize="40px" />}
           disableRipple={true}
           sx={{
             width: "max-content",
             padding: "0px",
             textTransform: "capitalize",
           }}
-        />
-        <Tab
-          label="Beverages"
-          {...a11yProps(4)}
-          classes={tabClasses}
-          icon={<EmojiFoodBeverageIcon sx={{ fontSize: "40px" }} />}
-          disableRipple={true}
-          sx={{
-            width: "max-content",
-            padding: "0px",
-            textTransform: "capitalize",
-          }}
+          onClick={() => getCategory("decorations")}
         />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <Banner title="Main Course" desc="When you have every favourite dishes in a plate"
-          bannerImage={bannerImage}
+        <Banner
+          title="Main Course"
+          desc="When you have every favourite dishes in a plate"
+          bannerImage={
+            "https://cdn.pixabay.com/photo/2015/03/30/12/45/pizza-698635_1280.jpg"
+          }
         />
-        <Product menu = {transformedProduct()} />
+        <Product menu={transformedProduct()} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-      <Banner title="Snacks" />
-      
+        <Banner title="Pizzas" pizza bannerImage={pizzaBannerImage} />
+        <Product menu={transformedProduct()} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-      <Banner title="Special Meals" />
+        <Banner title="Consumables" bannerImage={consumablesBannerImage} />
+        <Product menu={transformedProduct()} />
       </TabPanel>
       <TabPanel value={value} index={3}>
-      <Banner title="Desert" />
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-      <Banner title="Beverages" />
+        <Banner
+          title="Decorations"
+          bannerImage={
+            "https://cdn.pixabay.com/photo/2017/09/23/12/40/catering-2778755__480.jpg"
+          }
+        />
+        <Product menu={transformedProduct()} />
       </TabPanel>
     </Box>
   );
 }
-
-

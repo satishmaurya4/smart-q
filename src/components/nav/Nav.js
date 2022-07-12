@@ -8,14 +8,14 @@ import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import {useDispatch, useSelector} from 'react-redux'
-import { getAllProducts, getSearchedProduct} from '../features/products/productSlice'
+import { getState, getSearchedProduct} from '../features/products/productSlice'
 
 const Nav = () => {
   const [isCloseOpen, setIsCloseOpen] = useState(false);
   // const [input, setInput] = useState("");
   const dispatch = useDispatch();
-  const useProducts = useSelector(getAllProducts);
-  const { filterProducts: { searchProduct } } = useProducts;
+  const appState = useSelector(getState);
+  const { filterProducts: { searchProduct } } = appState;
 
   const handleCloseIcon = () => {
     if (!searchProduct) {

@@ -2,7 +2,7 @@ import { Box, Button, Typography } from '@mui/material'
 import React from 'react'
 import AddonsList from './AddonsList'
 
-const Addons = ({foodname,submenu, foodid, cancelAddons}) => {
+const Addons = ({ foodname, submenu, foodid, cancelAddons, getItemInfo}) => {
   return (
       <Box>
           <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
@@ -10,7 +10,7 @@ const Addons = ({foodname,submenu, foodid, cancelAddons}) => {
         <Button variant="text" disableRipple={true} onClick={()=>cancelAddons(foodid)}>Cancel</Button>
       </Box>
       <Typography variant='p' sx={{color: 'gray'}}>Choose Toppings</Typography>
-      <AddonsList submenu={submenu} />
+      <AddonsList submenu={submenu} id={foodid} getItemInfo={getItemInfo}  />
       <Box sx={{borderBottom: '2px dashed lightgray'}}></Box>
     </Box>
   )
